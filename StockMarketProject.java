@@ -49,7 +49,7 @@ public class StockMarketProject {
      */
     public static class Stock {
         private String name;
-        private int price;
+        private static int price;
         public double modifier;
         public static double StockAmount;
         public boolean stockClosed = false;
@@ -154,42 +154,67 @@ public class StockMarketProject {
             return (name + "," + price + "," + StockAmount);
         }
 
-        public static int[] arrayIndex = { 0, 0, 0 };
+        public static ArrayList<Integer> arrayIndex = new ArrayList<>();
+        public static int count = 0;
 
         public static void playerTurn(Scanner input) {
-            int count = 0;
             int arrayCount = 0;
+
             for (Stock stocks : Stock.stockList) {
                 if (count < 3) {
                     System.out.println(stocks);
                     System.out.println("Would you like to pick this stock yes or no?");
                     String nextInput = input.nextLine();
-                    if (nextInput.toLowerCase().equals("yes")) {
+                    if (nextInput.equalsIgnoreCase("yes")) {
                         System.out.println("Good pick");
-                        arrayIndex[count] = arrayCount;
+                        arrayIndex.add(arrayCount);
                         count++;
                     }
                     arrayCount++;
+                } else {
+                    break;
                 }
+            }
+            if (arrayIndex.size() < 3) {
+                playerTurn(input);
             }
         }
 
         public static ArrayList<Double> boughtStocks = new ArrayList<>();
 
         static void playerAction(Scanner input) {
-            for (int i = 0; i < arrayIndex.length; i++) {
-                int num = arrayIndex[i];
-                System.out.println("Would you like to invest in this stock: " + stockList.get(num));
-                if (input.next().equals("yes")) {
-                    System.out.println("How much would you like to spend?");
+            System.out.println("Would you like to buy or sell?");
+            String nextInput = input.next();
+            if (nextInput.equalsIgnoreCase("buy")) {
+                for (int i = 0; i < arrayIndex.size(); i++) {
+                    int num = arrayIndex.get(i);
+                    System.out.println("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
                     double invest = input.nextInt();
+                    if (invest > cash) {
+                        System.out.println(
+                                "Be aware you don't have enough cash on hand.\nYou have this much cash left " + cash);
+                        System.out.println("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
+                        invest = input.nextInt();
+                    }
                     cash -= invest;
-                    List<Double> holder = Arrays.asList(num + 0.0, invest);
+                    List<Double> holder = Arrays.asList(num + 0.0, (invest / price));
                     boughtStocks.addAll(holder);
                     System.out.println(cash);
                 }
+                System.out.println(boughtStocks.toString());
+            } else if (nextInput.equalsIgnoreCase("sell") && !boughtStocks.isEmpty()) {
+                for (int i = 0; i < arrayIndex.size(); i += 2) {
+                    System.out.println("Would you like to sell" + arrayIndex.get(i - 1));
+                    String yesorno = input.next();
+                    if (yesorno.equalsIgnoreCase("yes")) {
+                        System.out.println("You have " + arrayIndex.get(i) + "left and the price is"
+                                + stockList.get(arrayIndex.get((5 * i) + 1)));
+                        System.out.println("How much do you want to sell");
+                        int nextNum = input.nextInt();
+                    }
+
+                }
             }
-            System.out.println(boughtStocks.toString());
         }
     }
 
