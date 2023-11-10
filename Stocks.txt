@@ -1,0 +1,6 @@
+Carnations 67 0.0 large Summer
+Gardenias 46 0.0 large Summer
+Jasmine 24 0.0 med Summer
+Lilacs 15 0.0 med Summer
+Peonies 10 0.0 small Summer
+Roses 35 0.0 small Summer
