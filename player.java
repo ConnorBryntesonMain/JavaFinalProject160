@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
-public class player extends Stock {
+public class player<X, Y> extends Stock {
     private int count;
     private FlowerShares flowerShares;
     private double value;
@@ -32,7 +34,6 @@ public class player extends Stock {
         while (totalTurns > 0) {
             action(input);
             turnCounter(input);
-            Stock.updatePrices();
             totalTurns--;
         }
     }
@@ -45,9 +46,11 @@ public class player extends Stock {
         setCount(0);
     }
 
-    public ArrayList<Integer> arrayIndex = new ArrayList<>();
+    public List<Integer> arrayIndex = new ArrayList<>();
+    public boolean justPicked = false;
 
     public void pickStock(Scanner input) {
+
         input.nextLine();
         int arrayCount = 0;
         for (Stock stocks : Stock.stockList) {
@@ -62,6 +65,8 @@ public class player extends Stock {
                 }
                 arrayCount++;
             } else {
+                justPicked = true;
+                count = 0;
                 break;
             }
         }
@@ -70,17 +75,24 @@ public class player extends Stock {
         }
     }
 
-    public ArrayList<Double> boughtStocks = new ArrayList<>();
+    public ArrayList<PurchaseTuple> boughtStocks = new ArrayList<>();
+
     String nextInput;
 
     void action(Scanner input) {
         System.out.println("Would you like to buy or sell?");
         nextInput = input.next();
         if (nextInput.equalsIgnoreCase("buy")) {
+            if (justPicked) {
+                arrayIndex.removeAll(arrayIndex);
+                justPicked = false;
+            }
             pickStock(input);
             buyAction(input);
+            Stock.updatePrices();
         } else if (nextInput.equalsIgnoreCase("sell") && !boughtStocks.isEmpty()) {
             sellAction(input);
+            Stock.updatePrices();
         } else {
             System.out.println("You can not sell when you have no stock.");
             action(input);
@@ -101,37 +113,43 @@ public class player extends Stock {
             }
             cash -= invest;
             double position = i + 0.0;
-            boughtStocks.add(position);
             Stock bought = stockList.get(arrayIndex.get(i));
             int price = bought.getPrice();
             double scale = bought.getStockAmount();
-            boughtStocks.add((invest * 1.0) / (price * 1.0));
             bought.setStockAmount(scale - (invest / price));
+            PurchaseTuple<X, Y> purchase = new PurchaseTuple<X, Y>(position, (invest * 1.0) / (price * 1.0));
+            boughtStocks.add(purchase);
         }
         System.out.println(boughtStocks.toString());
     }
 
     void sellAction(Scanner input) {
-        int stockCount = 1;
-        for (int i = 0; i < arrayIndex.size(); i++) {
-            System.out.println("You have " + boughtStocks.get(stockCount) + " left and the price is "
-                    + stockList.get(arrayIndex.get(i)));
+        for (int i = 0; i < boughtStocks.size(); i++) {
+            PurchaseTuple information = boughtStocks.get(i);
+            System.out.println("You have " + information.toStringPartial() + " left and the price is "
+                    + stockList.get(arrayIndex.get((int) information.getPosition())));
             System.out.println("How much do you want to sell");
             double nextNum = input.nextDouble();
-
-            if (nextNum <= boughtStocks.get(stockCount)) {
-                Stock bought = stockList.get(arrayIndex.get(i));
+            if (nextNum <= information.getValue()) {
+                Stock bought = stockList.get(arrayIndex.get(((int) information.getPosition())));
                 double scale = bought.getStockAmount();
                 bought.setStockAmount(scale + nextNum);
                 cash += (nextNum * bought.getPrice());
-                if (nextNum == boughtStocks.get(stockCount)) {
-                    boughtStocks.remove(stockCount);
+                if (nextNum == information.getValue()) {
+                    boughtStocks.remove(i);
                 } else {
-                    double newStockAmount = boughtStocks.get(stockCount) - nextNum;
-                    boughtStocks.add(stockCount, newStockAmount);
+                    double newStockAmount = information.getValue() - nextNum;
+                    PurchaseTuple<X, Y> purchase = new PurchaseTuple<X, Y>(i, newStockAmount);
+                    boughtStocks.set(i, purchase);
                 }
             }
-            stockCount += 2;
+        }
+        int boughtItemsCount = 0;
+        for (int i = 0; i <= boughtStocks.size(); i++) {
+            if (boughtStocks.get(i).getValue() < 1) {
+                boughtStocks.remove(boughtItemsCount);
+            }
         }
     }
+
 }
