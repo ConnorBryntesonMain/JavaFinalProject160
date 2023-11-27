@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class player<X, Y> extends Stock {
     private int count;
-    private FlowerShares flowerShares;
+    private final FlowerShares flowerShares;
     private double value;
     public static double cash = 100000;
 
@@ -84,7 +84,7 @@ public class player<X, Y> extends Stock {
         nextInput = input.next();
         if (nextInput.equalsIgnoreCase("buy")) {
             if (justPicked) {
-                arrayIndex.removeAll(arrayIndex);
+                arrayIndex.clear();
                 justPicked = false;
             }
             pickStock(input);
@@ -117,7 +117,7 @@ public class player<X, Y> extends Stock {
             int price = bought.getPrice();
             double scale = bought.getStockAmount();
             bought.setStockAmount(scale - (invest / price));
-            PurchaseTuple<X, Y> purchase = new PurchaseTuple<X, Y>(position, (invest * 1.0) / (price * 1.0));
+            PurchaseTuple<X, Y> purchase = new PurchaseTuple<X, Y>(position, (invest) / (price * 1.0));
             boughtStocks.add(purchase);
         }
         System.out.println(boughtStocks.toString());
