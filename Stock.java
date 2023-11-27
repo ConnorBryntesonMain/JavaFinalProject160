@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Stock {
 
-    private String name;
+    private final String name;
     private int price;
     public double modifier;
     public double StockAmount;
@@ -114,11 +114,7 @@ public class Stock {
      *                   to buy that stock
      */
     public void priceChecker() {
-        if (price <= 0) {
-            stockClosed = true;
-        } else {
-            stockClosed = false;
-        }
+        stockClosed = price <= 0;
     }
 
 }
