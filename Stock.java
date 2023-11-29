@@ -42,32 +42,30 @@ public class Stock {
      * This is grabing share size
      * 
      * @return just returns share size...
-     * 
-     *         I dont know if this is needed anymore
      */
     public double getStockAmount() {
         return this.StockAmount;
     }
-
+    /**
+     * This is setting the stock amount
+     * @param n double this is the new stock amount
+     */
     public void setStockAmount(double n) {
         StockAmount = n;
     }
 
     /**
-     * this is just returning price but I dont know if it has a point
-     * 
      * @return price
      */
     int getPrice() {
         return price;
     }
-
-    void setPrice(int price) {
-        this.price = price;
-    }
-
+    //This is the stock list used through the whole program
     static ArrayList<Stock> stockList = new ArrayList<>();
-
+    /**
+     * This is building the list that you see above by pulling information from Stocks.txt
+     * It will do this automaticly so you can add as many stocks in addition and the program should still work
+     */
     public static void buildList() {
         try {
             Scanner stockSacn = new Scanner(new File("Stocks.txt"));
@@ -87,11 +85,17 @@ public class Stock {
         }
 
     }
+    /**
+     * This is printing the string, this is manly used for printing off basic stock info when buying or selling stocks
+     * in the game.
+     */
 
     public String toString() {
         return (name + "," + price + "," + StockAmount);
     }
-
+    /**
+     * This is how we get randomness in the price variation this also makes it so that the price can not be stanagte.
+     */
     public static void updatePrices() {
 
         for (Stock stock : Stock.stockList) {
@@ -100,25 +104,12 @@ public class Stock {
         }
     }
 
-    /**
-     * This is the mod rate but I dont have this tied to anything yet
-     * 
-     * @param moneyInOut this is the value but we dont have it being updated just
-     * 
-     * 
-     *                   modifier = (price * StockAmount) /
-     *                   StockMarketProject.inOrOut;
-     *                   if (modifier > 0.5) {
-     *                   price -= 10;
-     *                   } else {
-     *                   price += 10;
-     *                   }
-     *                   }
-     *                   ng if a flower cost 0 and it does it
-     *                   to buy that stock
-     */
-    public void priceChecker() {
-        stockClosed = price <= 0;
-    }
+    public int getSeason(){
+        if(this.season == "Summer"){
+            return 3;
+        }else {
+            return 2;
+        }
 
+    }
 }
