@@ -20,23 +20,11 @@ public class StockMarketProject {
     public static int playerChoice;
 
     public static void main(String[] args) throws FileNotFoundException {
-         //needed to run guiFlower test
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new GuiFlower();
-            }
-        });
-        //test
-
-
         player myPlayer = new player("LLCTitle", 100, 0.1, "small", "spring");
         Scanner input = new Scanner(System.in);
 
         Stock.buildList();
         myPlayer.turn(input);
-
-
-       
 
     }
 }

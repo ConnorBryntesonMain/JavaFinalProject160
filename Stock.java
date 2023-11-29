@@ -68,20 +68,24 @@ public class Stock {
 
     static ArrayList<Stock> stockList = new ArrayList<>();
 
-    public static void buildList() throws FileNotFoundException {
-        Scanner stockSacn = new Scanner(new File("Stocks.txt"));
-
-        while (stockSacn.hasNextLine()) {
-            String line = stockSacn.nextLine();
-            try (Scanner lineScan = new Scanner(line)) {
-                while (lineScan.hasNext()) {
-                    stockList.add(
-                            new Stock(lineScan.next(), lineScan.nextInt(), lineScan.nextDouble(), lineScan.next(),
-                                    lineScan.next()));
+    public static void buildList() {
+        try {
+            Scanner stockSacn = new Scanner(new File("Stocks.txt"));
+            while (stockSacn.hasNextLine()) {
+                String line = stockSacn.nextLine();
+                try (Scanner lineScan = new Scanner(line)) {
+                    while (lineScan.hasNext()) {
+                        stockList.add(
+                                new Stock(lineScan.next(), lineScan.nextInt(), lineScan.nextDouble(), lineScan.next(),
+                                        lineScan.next()));
+                    }
                 }
             }
+            System.out.println(stockList);
+        } catch (Exception FileNotFoundException) {
+
         }
-        System.out.println(stockList);
+
     }
 
     public String toString() {
