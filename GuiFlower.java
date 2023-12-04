@@ -1,50 +1,119 @@
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+            import javax.swing.*;
+            //import java.awt.*;
+            import java.awt.event.ActionEvent;
+            import java.awt.event.ActionListener;
+            import java.util.Scanner;
 
-public class GuiFlower {
+            public class GuiFlower {
+                String testVar = ("Here!");
 
-    public GuiFlower() {
-        // Create the frame
-        JFrame frame = new JFrame("Flower GUI with Buttons");
-        frame.setSize(300, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                private JFrame frame;
+                private JLabel questionLabel;
+                private JLabel stockListLabel;
+                private JLabel cashLabel;
+                
+                public GuiFlower() {
+                    // Set the GuiFlower instance in the Stock class
+                    Stock.setGuiFlowerInstance(this);
+                }
 
-        // Create three buttons
-        JButton button1 = new JButton("Buy");
-        JButton button2 = new JButton("Sell");
-        JButton button3 = new JButton("TEMP!");
 
-        button1.setBounds(50, 30, 100, 30);
-        button2.setBounds(50, 70, 100, 30);
-        button3.setBounds(50, 110, 100, 30);
 
-        // Add buttons to the frame directly
-        frame.add(button1);
-        frame.add(button2);
-        frame.add(button3);
 
-        // Add action listeners to the buttons (even though they do nothing in this
-        // example)
-        button1.addActionListener(new ButtonClickListener());
-        button2.addActionListener(new ButtonClickListener());
-        button3.addActionListener(new ButtonClickListener());
+                public void initialize() {
+                   /**
+                    *  This method starts the GUI, which runs the game
+                    very essential code
+                    */
+                    // Create the frame
+                    frame = new JFrame("Flower GUI with Buttons");
+                    frame.setSize(1000, 1000);
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Set layout manager to null (absolute positioning)
-        frame.setLayout(null);
+                
+                    //Button
+                    JButton enterButton = new JButton("Enter");
+                    // text field
+                    JTextField textField = new JTextField(20);
+                    
+                    questionLabel = new JLabel("Questions go here");
 
-        // Set the frame to be visible
-        frame.setVisible(true);
-    }
+                    stockListLabel = new JLabel("Stocks go here");
 
-    // ActionListener implementation for the buttons
-    private class ButtonClickListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // The code here will be executed when a button is clicked
-            System.out.println("Button clicked, but doing nothing!");
-        }
-    }
 
-}
+
+                    cashLabel = new JLabel("Cash Here");
+                    
+                    JLabel stockOwnedLabel = new JLabel("Stock Owned Here");
+                    JLabel testingLabel = new JLabel("Here!");
+                    
+
+                    //Questions added here
+                    questionLabel.setBounds(30, 30, 300, 30);
+
+
+
+                    enterButton.setBounds(150, 60, 100, 30);
+                    textField.setBounds(30,60,150, 30);
+                    cashLabel.setBounds(30,90,300,30);
+                    stockListLabel.setBounds(30,120,1200,60);
+                    stockOwnedLabel.setBounds(30,180,300,30);
+                    testingLabel.setBounds(250,60,300,30);
+
+                    // Add buttons to the frame directly
+                    frame.add(textField);
+                    frame.add(enterButton);
+                    frame.add(questionLabel);
+                    frame.add(cashLabel);
+                    frame.add(stockListLabel);
+                    frame.add(stockOwnedLabel);
+                    frame.add(testingLabel);
+                    
+                    enterButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Get the text from the text field
+                            String enteredText = textField.getText();
+            
+                            // Set the text in the label
+                            testingLabel.setText("Result: " + enteredText);
+                        }
+                    });
+            
+                    // Set the layout
+                    frame.setLayout(null);
+            
+                    // Set the frame to be visible
+                    frame.setVisible(true);
+
+                    //call player
+                    player myPlayer = new player("LLCTitle", 100, 0.1, "small", "spring");
+                    //Scanner input = new Scanner(System.in);
+
+                    /** 
+                    try {
+                        myPlayer.turn(input);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                        */
+                    // Call the buildList method to update the stock list label
+                    Stock.buildList();
+                    
+
+                    
+                }
+
+                public void updateQuestionLabel(String newText) {
+                    SwingUtilities.invokeLater(() -> questionLabel.setText(newText));
+                    }
+
+                public void updatestockListLabel(String newText) {
+                    SwingUtilities.invokeLater(() -> stockListLabel.setText(newText));
+                    }
+                public void updateCashLabel(String newText) {
+                    SwingUtilities.invokeLater(() -> cashLabel.setText(newText));
+                    }
+                    
+            }
+            

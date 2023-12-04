@@ -10,7 +10,13 @@ public class Stock {
     public boolean stockClosed = false;
     public boolean gameGoing = true;
     public String season;
-    private double value;
+    //private double value;
+    private static GuiFlower guiFlowerInstance;
+
+    // Setter method to set the GuiFlower instance
+    public static void setGuiFlowerInstance(GuiFlower guiFlower) {
+        guiFlowerInstance = guiFlower;
+    }
 
     /**
      * This is the constructor for the flower stocks
@@ -68,9 +74,9 @@ public class Stock {
      */
     public static void buildList() {
         try {
-            Scanner stockSacn = new Scanner(new File("Stocks.txt"));
-            while (stockSacn.hasNextLine()) {
-                String line = stockSacn.nextLine();
+            Scanner stockScan = new Scanner(new File("Stocks.txt"));
+            while (stockScan.hasNextLine()) {
+                String line = stockScan.nextLine();
                 try (Scanner lineScan = new Scanner(line)) {
                     while (lineScan.hasNext()) {
                         stockList.add(
@@ -79,6 +85,9 @@ public class Stock {
                     }
                 }
             }
+    
+            // Move the updatestockListLabel call outside the loop
+            guiFlowerInstance.updatestockListLabel(Arrays.toString(stockList.toArray()));
             System.out.println(stockList);
         } catch (Exception FileNotFoundException) {
 

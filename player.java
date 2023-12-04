@@ -10,6 +10,13 @@ public class player<X, Y> extends Stock {
     private final FlowerShares flowerShares;
     public static double cash = 100000;
 
+    
+
+  
+
+
+
+
     /**
      * @param LLCTitle String this is the name of the stock
      * @param startingPrice This is the starting price of the stock this number will change after the frist round of buying
@@ -65,9 +72,17 @@ public class player<X, Y> extends Stock {
      */
 
     public void namePicker(Scanner input) {
-        System.out.print("What would you like your name to be?");
+
+        GuiFlower guiFlower = new GuiFlower();
+
+        // Call the updateQuestionLabel method
+        guiFlower.updateQuestionLabel("What would you like your name to be?");
+
+       
         name = input.nextLine();
         System.out.println("Your name is " + name);
+
+        
     }
 
     /**
