@@ -2,6 +2,7 @@
             //import java.awt.*;
             import java.awt.event.ActionEvent;
             import java.awt.event.ActionListener;
+            import java.io.FileNotFoundException;
             import java.util.Scanner;
 
             public class GuiFlower {
@@ -19,7 +20,8 @@
 
 
 
-
+                JTextField textField = new JTextField(20);
+                boolean pressed = false;
                 public void initialize() {
                    /**
                     *  This method starts the GUI, which runs the game
@@ -34,7 +36,7 @@
                     //Button
                     JButton enterButton = new JButton("Enter");
                     // text field
-                    JTextField textField = new JTextField(20);
+
                     
                     questionLabel = new JLabel("Questions go here");
 
@@ -87,9 +89,15 @@
                     frame.setVisible(true);
 
                     //call player
-                    player myPlayer = new player("LLCTitle", 100, 0.1, "small", "spring");
+                    player myPlayer = new player(this,"LLCTitle", 100, 0.1, "small", "spring");
                     //Scanner input = new Scanner(System.in);
-
+                    if(!pressed) {
+                        try {
+                            myPlayer.turn(String.valueOf(getInputFromTextField()));
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     /** 
                     try {
                         myPlayer.turn(input);
@@ -99,9 +107,10 @@
                         */
                     // Call the buildList method to update the stock list label
                     Stock.buildList();
-                    
 
-                    
+
+
+
                 }
 
                 public void updateQuestionLabel(String newText) {
@@ -114,6 +123,11 @@
                 public void updateCashLabel(String newText) {
                     SwingUtilities.invokeLater(() -> cashLabel.setText(newText));
                     }
-                    
+                public Scanner getInputFromTextField() {
+                    // Replace this with the actual implementation to retrieve input from the text field
+                    // You might need to adapt this based on your GUI structure
+                    String userInput = textField.getText();
+                    return new Scanner(userInput);
+                }
             }
             

@@ -9,7 +9,7 @@ public class player<X, Y> extends Stock {
     private int count;
     private final FlowerShares flowerShares;
     public static double cash = 100000;
-
+    private GuiFlower guiFlowerInstance;
     
 
   
@@ -25,10 +25,11 @@ public class player<X, Y> extends Stock {
      * @param season This is when it is increasing or decreaing stock amounts
      */
 
-    public player(String LLCTitle, int startingPrice, double randomnessMod, String scale, String season) {
+    public player(GuiFlower guiFlowerInstance,String LLCTitle, int startingPrice, double randomnessMod, String scale, String season) {
         super(LLCTitle, startingPrice, randomnessMod, scale, season);
         this.count = 0;
         this.flowerShares = new FlowerShares(LLCTitle, startingPrice, randomnessMod, scale, season);
+        this.guiFlowerInstance = guiFlowerInstance;
 
     }
     /**
@@ -45,24 +46,38 @@ public class player<X, Y> extends Stock {
      * We are using this as a way to make sure that we can keep teh turns orgnized in a way that makes sense for the
      * project as it would get hard to read/understand with out it
      */
-    void turn(Scanner input) throws FileNotFoundException {
+    void turn(String playerName) throws FileNotFoundException {
         PrintStream output = new PrintStream(outputFile);
 
-        namePicker(input);
+        name = playerName;
         output.println(name);
-        action(input);
+
+        // Initial action
+        // Assuming the input is obtained from the text field, you can replace "getInputFromTextField()" with the actual method to retrieve input from the text field.
+        action(guiFlowerInstance.getInputFromTextField());
+
+        // Loop for the remaining turns
         while (totalTurns > 0) {
-            action(input);
+            // Additional actions
+            action(guiFlowerInstance.getInputFromTextField());
+
+            // Update game state
             flowerShares.changeSeasonStock();
-            for(Stock stock : stockList){
+            for (Stock stock : stockList) {
                 flowerShares.changeStockAmount(stock);
             }
+
+            // Print turn-by-turn data
             setCount(0);
             turnByturnPrint(output);
+
             totalTurns--;
         }
-
     }
+
+    // Assuming this method retrieves input from the text field
+
+
 
 
     String name;
