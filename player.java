@@ -1,5 +1,8 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,10 +12,10 @@ public class player<X, Y> extends Stock {
     private int count;
     private final FlowerShares flowerShares;
     public static double cash = 100000;
-    private GuiFlower guiFlowerInstance;
-    
 
-  
+
+
+
 
 
 
@@ -25,11 +28,10 @@ public class player<X, Y> extends Stock {
      * @param season This is when it is increasing or decreaing stock amounts
      */
 
-    public player(GuiFlower guiFlowerInstance,String LLCTitle, int startingPrice, double randomnessMod, String scale, String season) {
+    public player(String LLCTitle, int startingPrice, double randomnessMod, String scale, String season) {
         super(LLCTitle, startingPrice, randomnessMod, scale, season);
         this.count = 0;
         this.flowerShares = new FlowerShares(LLCTitle, startingPrice, randomnessMod, scale, season);
-        this.guiFlowerInstance = guiFlowerInstance;
 
     }
     /**
@@ -42,42 +44,39 @@ public class player<X, Y> extends Stock {
     //This is setting the turn limit as without it the game would just run forever
     int totalTurns = 5;
     /**
-     * @param input This is the scanner we need to make this run
      * We are using this as a way to make sure that we can keep teh turns orgnized in a way that makes sense for the
      * project as it would get hard to read/understand with out it
      */
-    void turn(String playerName) throws FileNotFoundException {
+    String test = "";
+    void turn() throws FileNotFoundException, InterruptedException {
         PrintStream output = new PrintStream(outputFile);
+        Scanner input = new Scanner(GuiFlower.bufferGrab());
+        test = input.next();
+        System.out.println(totalTurns);
+        if(test.equals("")){
 
-        name = playerName;
+            if(!GuiFlower.buttonPress) {
+                System.out.println("You are in the second if");
+            }
+        }else {
+            System.out.println("in the else");
+            namePicker(test);
+        }
+
         output.println(name);
-
-        // Initial action
-        // Assuming the input is obtained from the text field, you can replace "getInputFromTextField()" with the actual method to retrieve input from the text field.
-        action(guiFlowerInstance.getInputFromTextField());
-
-        // Loop for the remaining turns
+        action();
         while (totalTurns > 0) {
-            // Additional actions
-            action(guiFlowerInstance.getInputFromTextField());
-
-            // Update game state
+            action();
             flowerShares.changeSeasonStock();
-            for (Stock stock : stockList) {
+            for(Stock stock : stockList){
                 flowerShares.changeStockAmount(stock);
             }
-
-            // Print turn-by-turn data
             setCount(0);
             turnByturnPrint(output);
-
             totalTurns--;
         }
+
     }
-
-    // Assuming this method retrieves input from the text field
-
-
 
 
     String name;
@@ -86,18 +85,16 @@ public class player<X, Y> extends Stock {
      * This is meant to grab and display your name that way it feels more personal
      */
 
-    public void namePicker(Scanner input) {
+    public void namePicker(String input) {
 
-        GuiFlower guiFlower = new GuiFlower();
+
 
         // Call the updateQuestionLabel method
-        guiFlower.updateQuestionLabel("What would you like your name to be?");
-
-       
-        name = input.nextLine();
+        GuiFlower.updateQuestionLabel("What would you like your name to be?");
+        name = input;
         System.out.println("Your name is " + name);
 
-        
+
     }
 
     /**
@@ -117,29 +114,37 @@ public class player<X, Y> extends Stock {
     /**
      * This is action, also known as all the moving parts of the code. It holds all the actions a player can take in there
      * turn as such it is also where most things went wrong. And it just allows a player to act in the game.
-     * @param input this is the user input
      */
 
-    void action(Scanner input) {
-        System.out.println("Would you like to buy or sell?");
-        nextInput = input.nextLine();
+    void action() throws InterruptedException {
+        GuiFlower.updateQuestionLabel("Would you like to buy or sell?");
+        Scanner input = new Scanner(GuiFlower.bufferGrab());
+        while(input.hasNext()){
+            nextInput = input.next();
+        }
+        System.out.println("Out side of while loop");
+            if (nextInput.equalsIgnoreCase("buy")) {
+                if (justPicked) {
+                    arrayIndex.clear();
+                    justPicked = false;
+                }
+                input = new Scanner(GuiFlower.bufferGrab());
+                pickStock();
+                input = new Scanner(GuiFlower.bufferGrab());
+                buyAction(input.next());
+                Stock.updatePrices();
+            } else if (nextInput.equalsIgnoreCase("sell") && !boughtStocks.isEmpty()) {
+                input = new Scanner(GuiFlower.bufferGrab());
+                sellAction(input.next());
+                Stock.updatePrices();
+            } else {
+                GuiFlower.updateQuestionLabel("You can not sell when you have no stock.");
+                action();
+            }
+
         //System.out.println("Debug: nextInput = " + nextInput);
         //input.nextLine();
-        if (nextInput.equalsIgnoreCase("buy")) {
-            if (justPicked) {
-                arrayIndex.clear();
-                justPicked = false;
-            }
-            pickStock(input);
-            buyAction(input);
-            Stock.updatePrices();
-        } else if (nextInput.equalsIgnoreCase("sell") && !boughtStocks.isEmpty()) {
-            sellAction(input);
-            Stock.updatePrices();
-        } else {
-            System.out.println("You can not sell when you have no stock.");
-            action(input);
-        }
+
     }
 
 
@@ -154,7 +159,8 @@ public class player<X, Y> extends Stock {
     public List<Integer> arrayIndex = new ArrayList<>();
     public boolean justPicked = false;
 
-    public void pickStock(Scanner input) {
+    public void pickStock() throws InterruptedException {
+        
         //System.out.println("You are in pick stock");
         int arrayCount = 0;
 
@@ -168,10 +174,10 @@ public class player<X, Y> extends Stock {
                 //System.out.println("You are in the for loop");
                 if (count < 3 && arrayIndex.size() < 3) {
                     System.out.println(stocks);
-                    System.out.println("Would you like to pick this stock yes or no?");
-                    String nextInput = input.nextLine().trim();
+                    GuiFlower.updateQuestionLabel("Would you like to pick this stock yes or no?");
+                    Scanner input = new Scanner(GuiFlower.bufferGrab());
+                    String nextInput = input.next().trim();
                     if (nextInput.equalsIgnoreCase("yes")) {
-                        System.out.println("Good pick");
                         arrayIndex.add(arrayCount);
                         count++;
                     }
@@ -192,18 +198,21 @@ public class player<X, Y> extends Stock {
      */
 
 
-    void buyAction(Scanner input) {
-        System.out.println("You enter buy");
+    void buyAction(String input) throws InterruptedException {
+
         for (int i = 0; i < arrayIndex.size(); i++) {
             int num = arrayIndex.get(i);
-            System.out.println("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
-            double invest = input.nextInt();
+            GuiFlower.updateQuestionLabel("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
+            
+            double invest = Double.parseDouble(Objects.requireNonNull(test));
             if (invest > cash) {
-                System.out.println(
+                GuiFlower.updateQuestionLabel(
                         "Be aware you don't have enough cash on hand.\nYou have this much cash left "
                                 + cash);
-                System.out.println("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
-                invest = input.nextInt();
+                
+                GuiFlower.updateQuestionLabel("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
+                
+                invest = Double.parseDouble(Objects.requireNonNull(test));;
             }
             cash -= invest;
             double position = i + 0.0;
@@ -215,7 +224,6 @@ public class player<X, Y> extends Stock {
             boughtStocks.add(purchase);
         }
         justPicked = true;
-        input.nextLine();
         System.out.println(boughtStocks.toString());
     }
     /**
@@ -223,13 +231,15 @@ public class player<X, Y> extends Stock {
      * @param input this is the user input for the turn
      */
 
-    void sellAction(Scanner input) {
+    void sellAction(String input) throws InterruptedException {
         for (int i = 0; i < boughtStocks.size(); i++) {
             PurchaseTuple information = boughtStocks.get(i);
-            System.out.println("You have " + information.toStringPartial() + " left and the price is "
+            GuiFlower.updateQuestionLabel("You have " + information.toStringPartial() + " left and the price is "
                     + stockList.get(arrayIndex.get((int) information.getPosition())));
-            System.out.println("How much do you want to sell");
-            double nextNum = input.nextDouble();
+            
+            GuiFlower.updateQuestionLabel("How much do you want to sell");
+            
+            double nextNum = Double.parseDouble(Objects.requireNonNull(test));;
             if (nextNum <= information.getValue()) {
                 Stock bought = stockList.get(arrayIndex.get(((int) information.getPosition())));
                 double scale = bought.getStockAmount();
@@ -252,7 +262,8 @@ public class player<X, Y> extends Stock {
                 boughtStocks.remove(boughtItemsCount);
             }
         }
-        input.nextLine();
     }
+
+
 
 }

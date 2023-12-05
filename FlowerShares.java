@@ -9,23 +9,26 @@ public class FlowerShares extends Stock {
         this.currentSeason = 0;
     }
     //this is the change model
-    void changeSeasonStock() {
-
-        if (currentSeason == 4) {
-            currentSeason = 0;
-        }
-        currentSeason++;
+    Runnable changeSeasonStock() {
+        return () -> {
+            if (currentSeason == 4) {
+                currentSeason = 0;
+            }
+            currentSeason++;
+        };
     }
     /**
      * This is how we find out if they need change
      * @param s This is the stock we are testing
      */
 
-    void changeStockAmount(Stock s){
-        if (s.getSeason() == 3){
-            int change = seasonChanges[currentSeason];
-            s.setStockAmount(change + s.getStockAmount());
-        }
+    Runnable changeStockAmount(Stock s){
+        return() -> {
+            if (s.getSeason() == 3) {
+                int change = seasonChanges[currentSeason];
+                s.setStockAmount(change + s.getStockAmount());
+            }
+        };
 
     }
 

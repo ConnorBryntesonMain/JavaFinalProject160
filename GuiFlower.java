@@ -3,13 +3,13 @@
             import java.awt.event.ActionEvent;
             import java.awt.event.ActionListener;
             import java.io.FileNotFoundException;
-            import java.util.Scanner;
+            import java.util.*;
 
             public class GuiFlower {
                 String testVar = ("Here!");
 
                 private JFrame frame;
-                private JLabel questionLabel;
+                private static JLabel questionLabel;
                 private JLabel stockListLabel;
                 private JLabel cashLabel;
                 
@@ -20,9 +20,9 @@
 
 
 
-                JTextField textField = new JTextField(20);
-                boolean pressed = false;
-                public void initialize() {
+                static JTextField textField = new JTextField(20);
+                static JButton enterButton = new JButton("Enter");
+                public void initialize(){
                    /**
                     *  This method starts the GUI, which runs the game
                     very essential code
@@ -34,11 +34,11 @@
 
                 
                     //Button
-                    JButton enterButton = new JButton("Enter");
+
                     // text field
 
                     
-                    questionLabel = new JLabel("Questions go here");
+                    questionLabel = new JLabel("What is your name?");
 
                     stockListLabel = new JLabel("Stocks go here");
 
@@ -63,6 +63,7 @@
                     testingLabel.setBounds(250,60,300,30);
 
                     // Add buttons to the frame directly
+                    textField.setText("");
                     frame.add(textField);
                     frame.add(enterButton);
                     frame.add(questionLabel);
@@ -70,34 +71,25 @@
                     frame.add(stockListLabel);
                     frame.add(stockOwnedLabel);
                     frame.add(testingLabel);
-                    
+                    //Scanner input = new Scanner(System.in);
+
+                    // Set the layout
+                    frame.setLayout(null);
+
+                    // Set the frame to be visible
+                    frame.setVisible(true);
+                    // Get user input from the text field
+
+                    // Use the user input in the player's turn method
                     enterButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            // Get the text from the text field
-                            String enteredText = textField.getText();
-            
-                            // Set the text in the label
-                            testingLabel.setText("Result: " + enteredText);
+                            bufferString = textField.getText();
+                            buttonPress = true;
                         }
                     });
-            
-                    // Set the layout
-                    frame.setLayout(null);
-            
-                    // Set the frame to be visible
-                    frame.setVisible(true);
 
-                    //call player
-                    player myPlayer = new player(this,"LLCTitle", 100, 0.1, "small", "spring");
-                    //Scanner input = new Scanner(System.in);
-                    if(!pressed) {
-                        try {
-                            myPlayer.turn(String.valueOf(getInputFromTextField()));
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+
                     /** 
                     try {
                         myPlayer.turn(input);
@@ -106,14 +98,21 @@
                     }
                         */
                     // Call the buildList method to update the stock list label
-                    Stock.buildList();
+                    Stock.buildList(); 
+                    updatestockListLabel(Arrays.toString(Stock.stockList.toArray()));
+
+
 
 
 
 
                 }
 
-                public void updateQuestionLabel(String newText) {
+                public static void callturn(player myPlayer) throws FileNotFoundException, InterruptedException {
+                    myPlayer.turn();
+                }
+
+                public static void updateQuestionLabel(String newText) {
                     SwingUtilities.invokeLater(() -> questionLabel.setText(newText));
                     }
 
@@ -123,11 +122,28 @@
                 public void updateCashLabel(String newText) {
                     SwingUtilities.invokeLater(() -> cashLabel.setText(newText));
                     }
-                public Scanner getInputFromTextField() {
-                    // Replace this with the actual implementation to retrieve input from the text field
-                    // You might need to adapt this based on your GUI structure
-                    String userInput = textField.getText();
-                    return new Scanner(userInput);
+                public static String bufferString = "";
+                public static boolean buttonPress = false;
+                public static String bufferGrab() throws InterruptedException {
+                    System.out.println("You are in buffer grab");
+                   enterButton.addActionListener(new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent e) {
+                       bufferString = textField.getText();
+                       buttonPress = true;
+                        }
+                   });
+                   while(!buttonPress){
+                        Thread.sleep(100);
+                   }
+
+                    System.out.println(bufferString);
+                    buttonPress = false;
+                    textField.setText("");
+                    return bufferString;
                 }
+
+
+
             }
             

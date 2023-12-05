@@ -28,17 +28,34 @@
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     GuiFlower guiFlower = new GuiFlower();
+                    guiFlower.initialize();
+                    MyThread threadTurn = new MyThread();
+                    threadTurn.start();
 
-            // Initialize the GUI
-            guiFlower.initialize();
-                    
                 }
             });
 
 
 
             //Stock.buildList();
-        
 
+
+        }
+        public static class MyThread extends Thread{
+            public void run(){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                player myPlayer = new player("LLCTitle", 100, 0.1, "small", "spring");
+                try {
+                    myPlayer.turn();
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }

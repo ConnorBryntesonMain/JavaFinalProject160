@@ -27,7 +27,6 @@ public class Stock {
      * @param randomnessMod this is going to be impacted by the inOrOut value but
      *                      has yet to be impelemented
      * @param scale         this is how much is in stock of a certain flower
-     * @param optionsNum    this displays for user input
      */
     public Stock(String flowerName, int startingPrice, double randomnessMod, String scale, String season) {
         this.name = flowerName;
@@ -87,7 +86,7 @@ public class Stock {
             }
     
             // Move the updatestockListLabel call outside the loop
-            guiFlowerInstance.updatestockListLabel(Arrays.toString(stockList.toArray()));
+
             System.out.println(stockList);
         } catch (Exception FileNotFoundException) {
 
