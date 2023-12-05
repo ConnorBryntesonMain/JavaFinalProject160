@@ -1,5 +1,6 @@
             import javax.swing.*;
             //import java.awt.*;
+            import java.awt.*;
             import java.awt.event.ActionEvent;
             import java.awt.event.ActionListener;
             import java.io.FileNotFoundException;
@@ -31,7 +32,7 @@
                     */
                     // Create the frame
                     frame = new JFrame("Flower GUI with Buttons");
-                    frame.setSize(1000, 1000);
+                    frame.setSize(1200, 1000);
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 
@@ -54,14 +55,18 @@
 
                     //Questions added here
                     questionLabel.setBounds(30, 30, 600, 30);
-
+                    questionLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 
 
                     enterButton.setBounds(150, 60, 100, 30);
+                    enterButton.setFont(new Font("Serif", Font.PLAIN, 20));
                     textField.setBounds(30,60,150, 30);
                     cashLabel.setBounds(30,90,300,30);
+                    cashLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                     stockListLabel.setBounds(30,120,1200,60);
+                    stockListLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                     stockOwnedLabel.setBounds(30,180,600,30);
+                    stockOwnedLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                     testingLabel.setBounds(250,60,300,30);
 
                     // Add buttons to the frame directly

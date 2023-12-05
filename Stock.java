@@ -1,5 +1,7 @@
+import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
+
 
 public class Stock {
 
@@ -97,9 +99,9 @@ public class Stock {
      * This is printing the string, this is manly used for printing off basic stock info when buying or selling stocks
      * in the game.
      */
-
+    DecimalFormat df = new DecimalFormat("#.##");
     public String toString() {
-        return (name + "," + price + "," + StockAmount);
+        return (name + "," + df.format(price) + "," + df.format(StockAmount));
     }
     /**
      * This is how we get randomness in the price variation this also makes it so that the price can not be stanagte.
@@ -119,5 +121,9 @@ public class Stock {
             return 2;
         }
 
+    }
+
+    public String getName() {
+        return name;
     }
 }
