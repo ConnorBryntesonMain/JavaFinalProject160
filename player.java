@@ -1,9 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -64,13 +61,14 @@ public class player<X, Y> extends Stock {
         }
 
         output.println(name);
-        action();
         while (totalTurns > 0) {
             action();
             flowerShares.changeSeasonStock();
             for(Stock stock : stockList){
                 flowerShares.changeStockAmount(stock);
             }
+            GuiFlower.updatestockListLabel(Arrays.toString(stockList.toArray()));
+            GuiFlower.updateStockOwnLabel(Arrays.toString(boughtStocks.toArray()));
             setCount(0);
             turnByturnPrint(output);
             totalTurns--;
@@ -118,6 +116,7 @@ public class player<X, Y> extends Stock {
 
     void action() throws InterruptedException {
         GuiFlower.updateQuestionLabel("Would you like to buy or sell?");
+
         Scanner input = new Scanner(GuiFlower.bufferGrab());
         while(input.hasNext()){
             nextInput = input.next();
@@ -128,14 +127,12 @@ public class player<X, Y> extends Stock {
                     arrayIndex.clear();
                     justPicked = false;
                 }
-                input = new Scanner(GuiFlower.bufferGrab());
+
                 pickStock();
-                input = new Scanner(GuiFlower.bufferGrab());
-                buyAction(input.next());
+                buyAction();
                 Stock.updatePrices();
             } else if (nextInput.equalsIgnoreCase("sell") && !boughtStocks.isEmpty()) {
-                input = new Scanner(GuiFlower.bufferGrab());
-                sellAction(input.next());
+                sellAction();
                 Stock.updatePrices();
             } else {
                 GuiFlower.updateQuestionLabel("You can not sell when you have no stock.");
@@ -174,7 +171,7 @@ public class player<X, Y> extends Stock {
                 //System.out.println("You are in the for loop");
                 if (count < 3 && arrayIndex.size() < 3) {
                     System.out.println(stocks);
-                    GuiFlower.updateQuestionLabel("Would you like to pick this stock yes or no?");
+                    GuiFlower.updateQuestionLabel("Would you like to pick this stock yes or no? (" + stocks + ")");
                     Scanner input = new Scanner(GuiFlower.bufferGrab());
                     String nextInput = input.next().trim();
                     if (nextInput.equalsIgnoreCase("yes")) {
@@ -194,17 +191,17 @@ public class player<X, Y> extends Stock {
     public ArrayList<PurchaseTuple> boughtStocks = new ArrayList<>();
     /**
      * This is users buy action, it allows them to spend up to how much cash they have on a stock
-     * @param input this is the user input
      */
 
 
-    void buyAction(String input) throws InterruptedException {
+    void buyAction() throws InterruptedException {
 
         for (int i = 0; i < arrayIndex.size(); i++) {
             int num = arrayIndex.get(i);
             GuiFlower.updateQuestionLabel("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
-            
-            double invest = Double.parseDouble(Objects.requireNonNull(test));
+            Scanner input = new Scanner(GuiFlower.bufferGrab());
+            String userInput = input.next();
+            double invest = Double.parseDouble(userInput);
             if (invest > cash) {
                 GuiFlower.updateQuestionLabel(
                         "Be aware you don't have enough cash on hand.\nYou have this much cash left "
@@ -212,9 +209,10 @@ public class player<X, Y> extends Stock {
                 
                 GuiFlower.updateQuestionLabel("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
                 
-                invest = Double.parseDouble(Objects.requireNonNull(test));;
-            }
+                invest = Double.parseDouble(userInput);
+            }else{
             cash -= invest;
+            GuiFlower.updateCashLabel("$" + player.cash + "");
             double position = i + 0.0;
             Stock bought = stockList.get(arrayIndex.get(i));
             int price = bought.getPrice();
@@ -223,28 +221,30 @@ public class player<X, Y> extends Stock {
             PurchaseTuple<X, Y> purchase = new PurchaseTuple<X, Y>(position, (invest) / (price * 1.0));
             boughtStocks.add(purchase);
         }
+        }
         justPicked = true;
         System.out.println(boughtStocks.toString());
     }
     /**
      * This is the sell turn allowing them to sell any stock that they own in the order that they bought the item
-     * @param input this is the user input for the turn
      */
 
-    void sellAction(String input) throws InterruptedException {
+    void sellAction() throws InterruptedException {
         for (int i = 0; i < boughtStocks.size(); i++) {
             PurchaseTuple information = boughtStocks.get(i);
             GuiFlower.updateQuestionLabel("You have " + information.toStringPartial() + " left and the price is "
                     + stockList.get(arrayIndex.get((int) information.getPosition())));
             
             GuiFlower.updateQuestionLabel("How much do you want to sell");
-            
-            double nextNum = Double.parseDouble(Objects.requireNonNull(test));;
+            Scanner input = new Scanner(GuiFlower.bufferGrab());
+            test = input.next();
+            double nextNum = Double.parseDouble(test);;
             if (nextNum <= information.getValue()) {
                 Stock bought = stockList.get(arrayIndex.get(((int) information.getPosition())));
                 double scale = bought.getStockAmount();
                 bought.setStockAmount(scale + nextNum);
                 cash += (nextNum * bought.getPrice());
+                GuiFlower.updateCashLabel("$" + player.cash + "");
                 if (nextNum == information.getValue()) {
                     boughtStocks.remove(i);
                 } else {

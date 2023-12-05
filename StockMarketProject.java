@@ -50,6 +50,9 @@
                 }
                 player myPlayer = new player("LLCTitle", 100, 0.1, "small", "spring");
                 try {
+
+
+                    GuiFlower.updateCashLabel("$" + player.cash + "");
                     myPlayer.turn();
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);

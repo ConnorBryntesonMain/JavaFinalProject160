@@ -10,8 +10,10 @@
 
                 private JFrame frame;
                 private static JLabel questionLabel;
-                private JLabel stockListLabel;
-                private JLabel cashLabel;
+                private static JLabel stockListLabel;
+                private static JLabel cashLabel;
+
+                private static JLabel stockOwnedLabel;
                 
                 public GuiFlower() {
                     // Set the GuiFlower instance in the Stock class
@@ -46,12 +48,12 @@
 
                     cashLabel = new JLabel("Cash Here");
                     
-                    JLabel stockOwnedLabel = new JLabel("Stock Owned Here");
+                    stockOwnedLabel = new JLabel("Stock Owned Here");
                     JLabel testingLabel = new JLabel("Here!");
                     
 
                     //Questions added here
-                    questionLabel.setBounds(30, 30, 300, 30);
+                    questionLabel.setBounds(30, 30, 600, 30);
 
 
 
@@ -59,7 +61,7 @@
                     textField.setBounds(30,60,150, 30);
                     cashLabel.setBounds(30,90,300,30);
                     stockListLabel.setBounds(30,120,1200,60);
-                    stockOwnedLabel.setBounds(30,180,300,30);
+                    stockOwnedLabel.setBounds(30,180,600,30);
                     testingLabel.setBounds(250,60,300,30);
 
                     // Add buttons to the frame directly
@@ -116,13 +118,16 @@
                     SwingUtilities.invokeLater(() -> questionLabel.setText(newText));
                     }
 
-                public void updatestockListLabel(String newText) {
+                public static void updatestockListLabel(String newText) {
                     SwingUtilities.invokeLater(() -> stockListLabel.setText(newText));
                     }
-                public void updateCashLabel(String newText) {
+                public static void updateCashLabel(String newText) {
                     SwingUtilities.invokeLater(() -> cashLabel.setText(newText));
                     }
-                public static String bufferString = "";
+                public static void updateStockOwnLabel(String newText) {
+                    SwingUtilities.invokeLater(() -> stockOwnedLabel.setText(newText));
+                    }
+                    public static String bufferString = "";
                 public static boolean buttonPress = false;
                 public static String bufferGrab() throws InterruptedException {
                     System.out.println("You are in buffer grab");
