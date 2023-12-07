@@ -2,7 +2,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
-
 public class Stock {
 
     private final String name;
@@ -12,7 +11,7 @@ public class Stock {
     public boolean stockClosed = false;
     public boolean gameGoing = true;
     public String season;
-    //private double value;
+    // private double value;
     private static GuiFlower guiFlowerInstance;
 
     // Setter method to set the GuiFlower instance
@@ -53,8 +52,10 @@ public class Stock {
     public double getStockAmount() {
         return this.StockAmount;
     }
+
     /**
      * This is setting the stock amount
+     * 
      * @param n double this is the new stock amount
      */
     public void setStockAmount(double n) {
@@ -67,11 +68,15 @@ public class Stock {
     int getPrice() {
         return price;
     }
-    //This is the stock list used through the whole program
+
+    // This is the stock list used through the whole program
     static ArrayList<Stock> stockList = new ArrayList<>();
+
     /**
-     * This is building the list that you see above by pulling information from Stocks.txt
-     * It will do this automaticly so you can add as many stocks in addition and the program should still work
+     * This is building the list that you see above by pulling information from
+     * Stocks.txt
+     * It will do this automaticly so you can add as many stocks in addition and the
+     * program should still work
      */
     public static void buildList() {
         try {
@@ -86,7 +91,7 @@ public class Stock {
                     }
                 }
             }
-    
+
             // Move the updatestockListLabel call outside the loop
 
             System.out.println(stockList);
@@ -95,16 +100,21 @@ public class Stock {
         }
 
     }
+
     /**
-     * This is printing the string, this is manly used for printing off basic stock info when buying or selling stocks
+     * This is printing the string, this is manly used for printing off basic stock
+     * info when buying or selling stocks
      * in the game.
      */
     DecimalFormat df = new DecimalFormat("#.##");
+
     public String toString() {
         return (name + "," + df.format(price) + "," + df.format(StockAmount));
     }
+
     /**
-     * This is how we get randomness in the price variation this also makes it so that the price can not be stanagte.
+     * This is how we get randomness in the price variation this also makes it so
+     * that the price can not be stanagte.
      */
     public static void updatePrices() {
 
@@ -114,10 +124,10 @@ public class Stock {
         }
     }
 
-    public int getSeason(){
-        if(this.season == "Summer"){
+    public int getSeason() {
+        if (this.season == "Summer") {
             return 3;
-        }else {
+        } else {
             return 2;
         }
 

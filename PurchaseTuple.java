@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+
 public class PurchaseTuple<X, Y> {
     public final double x;
     public final double y;
