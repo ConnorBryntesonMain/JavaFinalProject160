@@ -194,6 +194,17 @@
                     }
                 }
             }
+            boolean isDouble(String text){
+                try{
+                    Double.parseDouble(text);
+                    return true;
+                }catch (NumberFormatException e){
+                    return false;
+                }
+
+            }
+    
+                
             /**
              * Arraylist for owned stocks
              * ~ArrayList
@@ -211,6 +222,12 @@
                     GuiFlower.updateQuestionLabel("How much would you like to spend on " + stockList.get(arrayIndex.get(i)));
                     Scanner input = new Scanner(GuiFlower.bufferGrab());
                     String userInput = input.next();
+                        
+                    while(!isDouble(userInput)){
+                        input = new Scanner(GuiFlower.bufferGrab());
+                        userInput = input.next();
+                    }
+                        
                     double invest = Double.parseDouble(userInput);
                     if (invest > cash) 
                     {
@@ -250,6 +267,10 @@
                     GuiFlower.updateQuestionLabel("How much do you want to sell");
                     Scanner input = new Scanner(GuiFlower.bufferGrab());
                     test = input.next();
+                    while(!isDouble(test)){
+                        input = new Scanner(GuiFlower.bufferGrab());
+                        test = input.next();
+                    }
                     double nextNum = Double.parseDouble(test);
                     ;
                     if (nextNum <= information.getValue()) 
