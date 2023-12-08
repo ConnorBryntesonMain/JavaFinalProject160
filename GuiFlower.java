@@ -45,7 +45,7 @@
                 cashLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                 stockListLabel.setBounds(30, 120, 1200, 60);
                 stockListLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-                stockOwnedLabel.setBounds(30, 180, 600, 30);
+                stockOwnedLabel.setBounds(30, 180, 1200, 30);
                 stockOwnedLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                 textField.setText("");
                 

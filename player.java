@@ -194,6 +194,12 @@
                     }
                 }
             }
+
+            /**
+             * This is checking if a line of text is a double
+             * @param text this is the string we are checking
+             */
+
             boolean isDouble(String text){
                 try{
                     Double.parseDouble(text);
@@ -275,7 +281,7 @@
                     ;
                     if (nextNum <= information.getValue()) 
                     {
-                        Stock bought = stockList.get(arrayIndex.get(((int) information.getPosition())));
+                        Stock bought = stockList.get(arrayIndex.get((int) information.getPosition()));
                         double scale = bought.getStockAmount();
                         bought.setStockAmount(scale + nextNum);
                         cash += (nextNum * bought.getPrice());
@@ -291,15 +297,22 @@
                         }
                     }
                 }
+                stockAmountCheck();
+            }
+            /*
+            * This is checking if a stock that you bough has any left in it
+            */
+            void stockAmountCheck(){
                 int boughtItemsCount = 0;
 
-                for (int i = 0; i <= boughtStocks.size() - 1; i++) 
+                for (int i = 0; i < boughtStocks.size(); i++)
                 {
                     double stockValue = boughtStocks.get(i).getValue();
-                    if (stockValue < 1) 
+                    if (stockValue < 1.0)
                     {
                         boughtStocks.remove(boughtItemsCount);
                     }
+                    boughtItemsCount++;
                 }
             }
 
