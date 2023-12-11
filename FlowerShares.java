@@ -36,17 +36,12 @@ public class FlowerShares extends Stock {
      * ~Runnable
      */
 
-    Runnable changeStockAmount(Stock s) 
+    void changeStockAmount(Stock s)
     {
-        return () -> 
-        {
-            if (s.getSeason() == 3) 
-            {
+        if (s.getSeason() == 3) {
                 int change = seasonChanges[currentSeason];
                 s.setStockAmount(change + s.getStockAmount());
-            }
-        };
-
+        }
     }
 
 }

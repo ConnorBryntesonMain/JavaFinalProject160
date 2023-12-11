@@ -131,7 +131,7 @@ public class Stock {
 
         for (Stock stock : Stock.stockList) 
         {
-            int randomChange = (int) (Math.random() * 21) - 10;
+            int randomChange = (int) ((Math.random() * 21) - 10);
             stock.price += randomChange;
         }
     }

@@ -12,6 +12,10 @@
             private static JLabel cashLabel;
             private static JLabel stockOwnedLabel;
 
+            private static JLabel stockOwnedLabelExample;
+
+            private static JLabel stockExample;
+
             /*Set the GuiFlower instance in the Stock class
             */
             public GuiFlower() {
@@ -32,7 +36,9 @@
                 questionLabel = new JLabel("What is your name?");
                 stockListLabel = new JLabel("Stocks go here");
                 cashLabel = new JLabel("Cash Here");
-                stockOwnedLabel = new JLabel("Stock Owned Here");
+                stockOwnedLabel = new JLabel("");
+                stockOwnedLabelExample = new JLabel("Stock Owned:");
+                stockExample = new JLabel("This is what stock is (Name, Price, Total Available Amount)");
                 
 
 
@@ -43,9 +49,13 @@
                 textField.setBounds(30, 60, 150, 30);
                 cashLabel.setBounds(30, 90, 300, 30);
                 cashLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-                stockListLabel.setBounds(30, 120, 1200, 60);
+                stockExample.setBounds(30, 130, 500, 30);
+                stockExample.setFont(new Font("Serif", Font.PLAIN, 20));
+                stockListLabel.setBounds(30, 150, 1200, 60);
                 stockListLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-                stockOwnedLabel.setBounds(30, 180, 1200, 30);
+                stockOwnedLabelExample.setBounds(30, 200, 400, 30);
+                stockOwnedLabelExample.setFont(new Font("Serif", Font.PLAIN, 20));
+                stockOwnedLabel.setBounds(30, 220, 1200, 30);
                 stockOwnedLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                 textField.setText("");
                 
@@ -55,6 +65,8 @@
                 frame.add(cashLabel);
                 frame.add(stockListLabel);
                 frame.add(stockOwnedLabel);
+                frame.add(stockOwnedLabelExample);
+                frame.add(stockExample);
                 
                 
                 frame.setLayout(null);
@@ -79,13 +91,7 @@
                 updatestockListLabel(Arrays.toString(Stock.stockList.toArray()));
 
             }
-            /* This method calls/starts the turn
-             * @param myPlayer player
-             */
-            public static void callturn(player myPlayer) throws FileNotFoundException, InterruptedException
-            {
-                myPlayer.turn();
-            }
+
             /* This method sets the questionLabel to the new question prompt
              * @Param newText String
              */
@@ -140,8 +146,11 @@
                 {
                     Thread.sleep(100);
                 }
-
-                System.out.println(bufferString);
+                if(bufferString.isEmpty()){
+                    buttonPress = false;
+                    textField.setText("");
+                    bufferGrab();
+                }
                 buttonPress = false;
                 textField.setText("");
                 return bufferString;
